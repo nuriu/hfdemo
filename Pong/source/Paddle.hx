@@ -1,7 +1,7 @@
 package;
 
-import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.util.FlxColor;
 
 class Paddle extends FlxSprite
@@ -9,6 +9,7 @@ class Paddle extends FlxSprite
     public function new(x:Float, y:Float, renk:FlxColor)
     {
         super(x, y);
+        
         makeGraphic(10, 100, renk);
     }
 
