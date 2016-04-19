@@ -24,6 +24,7 @@ class Top extends FlxSprite
         this.velocity.y = -200;
 
         carpmaSesi = FlxG.sound.load(AssetPaths.carpma__wav);
+        carpmaSesi.volume = 0.5;
     }
 
     override public function update(elapsed:Float):Void

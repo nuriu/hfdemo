@@ -18,6 +18,9 @@ class MenuDurumu extends FlxState
 
 	override public function create():Void
 	{
+		if (FlxG.sound.music == null)
+			FlxG.sound.playMusic(AssetPaths.arkaplan__ogg, 0.75, false);
+
 		super.create();
 
 		baslatTusu = new FlxButton(0, 0, "", function()

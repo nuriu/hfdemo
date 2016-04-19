@@ -20,6 +20,9 @@ class OyunDurumu extends FlxState
 	{
 		super.create();
 
+		if (FlxG.sound.music == null)
+			FlxG.sound.playMusic(AssetPaths.arkaplan__ogg, 0.25, true);
+
 		// birinci oyuncu
 		oyuncu = new Paddle(10, 10, FlxColor.WHITE);
 		add(oyuncu);
