@@ -13,6 +13,8 @@ class MenuDurumu extends FlxState
 	private var oyuncu:Paddle;
 	private var oyuncu2:Paddle;
 	private var top:Top;
+	public static var oyuncuSkor:Float = 0;
+	public static var oyuncu2Skor:Float = 0;
 
 	override public function create():Void
 	{
@@ -29,6 +31,15 @@ class MenuDurumu extends FlxState
 		// top
 		top = new Top(FlxG.stage.stageWidth / 2, FlxG.stage.stageHeight / 2, FlxColor.YELLOW);
 		add(top);
+
+		// skor değerleri
+		var orta:Float = FlxG.stage.stageWidth / 2;
+		var oyuncuSkorMetni:FlxText = new FlxText(orta - 100, 20, 100, "" + oyuncuSkor, 24);
+		var oyuncu2SkorMetni:FlxText = new FlxText(orta + 100, 20, 100, "" + oyuncu2Skor, 24);
+
+		add(oyuncuSkorMetni);
+		add(oyuncu2SkorMetni);
+		
 	}
 
 	override public function update(elapsed:Float):Void

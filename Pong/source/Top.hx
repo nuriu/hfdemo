@@ -29,9 +29,18 @@ class Top extends FlxSprite
         if (this.y < 0 || this.y + this.height > FlxG.stage.stageHeight)
         	this.velocity.y *= -1;
 
-        // yanlardan çıkması durumunda oyunu yeniden başlat
-        if (this.x + this.width < 0 || this.x > FlxG.stage.stageWidth)
+        // yanlardan çıkması durumunda skoru arttır ve oyunu yeniden başlat
+        if (this.x + this.width < 0)
+        {
+        	MenuDurumu.oyuncu2Skor += 1;
         	FlxG.switchState(new MenuDurumu());
+        }
+
+        if(this.x > FlxG.stage.stageWidth)
+        {
+        	MenuDurumu.oyuncuSkor += 1;
+        	FlxG.switchState(new MenuDurumu());
+        }
     }
 
     public function sekme(paddle:Paddle):Void
