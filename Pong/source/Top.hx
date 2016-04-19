@@ -40,14 +40,14 @@ class Top extends FlxSprite
         // yanlardan çıkması durumunda skoru arttır ve oyunu yeniden başlat
         if (this.x + this.width < 0)
         {
-        	MenuDurumu.oyuncu2Skor += 1;
-        	FlxG.switchState(new MenuDurumu());
+        	OyunDurumu.oyuncu2Skor += 1;
+        	FlxG.switchState(new OyunDurumu());
         }
 
         if(this.x > FlxG.stage.stageWidth)
         {
-        	MenuDurumu.oyuncuSkor += 1;
-        	FlxG.switchState(new MenuDurumu());
+        	OyunDurumu.oyuncuSkor += 1;
+        	FlxG.switchState(new OyunDurumu());
         }
     }
 

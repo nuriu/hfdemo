@@ -1,90 +1,60 @@
 package;
 
+import flash.system.System;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
-import flixel.util.FlxColor;
+import flixel.util.FlxAxes;
 
 class MenuDurumu extends FlxState
 {
-	private var oyuncu:Paddle;
-	private var oyuncu2:Paddle;
-	private var top:Top;
-	public static var oyuncuSkor:Float = 0;
-	public static var oyuncu2Skor:Float = 0;
+	private var baslatTusu:FlxButton;
+	private var cikisTusu:FlxButton;
+	private var baslik:FlxText;
+	private var yapan:FlxText;
 
 	override public function create():Void
 	{
 		super.create();
 
-		// birinci oyuncu
-		oyuncu = new Paddle(10, 10, FlxColor.WHITE);
-		add(oyuncu);
+		baslatTusu = new FlxButton(0, 0, "", function()
+		{
+			FlxG.switchState(new OyunDurumu());
+		});
 
-		// ikinci oyuncu
-		oyuncu2 = new Paddle(620, 10, FlxColor.RED);
-		add(oyuncu2);
+		baslatTusu.loadGraphic(AssetPaths.oyna__png, false);
+		baslatTusu.x = FlxG.width / 2 - baslatTusu.width - 10;
+		baslatTusu.y = FlxG.height / 2 - baslatTusu.height / 2;
+		add(baslatTusu);
 
-		// top
-		top = new Top(FlxG.stage.stageWidth / 2, FlxG.stage.stageHeight / 2, FlxColor.YELLOW);
-		add(top);
+		#if desktop
+		cikisTusu = new FlxButton(0, 0, "", function()
+		{
+			System.exit(0);
+		});
 
-		// skor değerleri
-		var orta:Float = FlxG.stage.stageWidth / 2;
-		var oyuncuSkorMetni:FlxText = new FlxText(orta - 100, 20, 100, "" + oyuncuSkor, 24);
-		var oyuncu2SkorMetni:FlxText = new FlxText(orta + 100, 20, 100, "" + oyuncu2Skor, 24);
+		cikisTusu.loadGraphic(AssetPaths.cik__png, false);
+		cikisTusu.x = FlxG.width / 2 + cikisTusu.width / 2 - 10;
+		cikisTusu.y = FlxG.height / 2 - cikisTusu.height / 2;
+		add(cikisTusu);
+		#end
 
-		add(oyuncuSkorMetni);
-		add(oyuncu2SkorMetni);
-		
+		baslik = new FlxText(0, 40, 0, "PONG", 48);
+		baslik.alignment = FlxTextAlign.CENTER;
+		baslik.screenCenter(FlxAxes.X);
+		add(baslik);
+
+		yapan = new FlxText(0, 440, 0, "(c) 2016 - IO", 12);
+		yapan.alignment = FlxTextAlign.CENTER;
+		yapan.screenCenter(FlxAxes.X);
+		add(yapan);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-
-		// çarpma durumunda ilgili fonksiyonu çağır
-		if (FlxG.overlap(top, oyuncu))
-			oyuncuyaCarpma(top, oyuncu);
-		else if (FlxG.overlap(top, oyuncu2))
-			oyuncuyaCarpma(top, oyuncu2);
-		
-
-		// birinci oyuncu hareketleri
-		if (FlxG.keys.pressed.W)
-			oyuncu.y -= 5;
-
-		if (FlxG.keys.pressed.S)
-			oyuncu.y += 5;
-
-		// birinci oyuncunun ekrandan dışarı çıkmasını önleme
-		if (oyuncu.y < 0)
-			oyuncu.y = 0;
-
-		if (oyuncu.y > FlxG.stage.stageHeight - oyuncu.height)
-			oyuncu.y = FlxG.stage.stageHeight - oyuncu.height;
-
-		// ikinci oyuncu hareketleri
-		if (FlxG.keys.pressed.UP)
-			oyuncu2.y -= 5;
-
-		if (FlxG.keys.pressed.DOWN)
-			oyuncu2.y += 5;
-
-		// ikinci oyuncunun ekrandan dışarı çıkmasını önleme
-		if (oyuncu2.y < 0)
-			oyuncu2.y = 0;
-		
-		if (oyuncu2.y > FlxG.stage.stageHeight - oyuncu2.height)
-			oyuncu2.y = FlxG.stage.stageHeight - oyuncu2.height;
-	}
-
-	public function oyuncuyaCarpma(buTop:Top, buOyuncu:Paddle):Void
-	{
-		// ilgili topun hızını ters çevirme fonksiyonunu çağır
-		buTop.sekme(buOyuncu);
 	}
 }
