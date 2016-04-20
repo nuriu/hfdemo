@@ -9,8 +9,15 @@ import flixel.math.FlxMath;
 
 class OyunDurumu extends FlxState
 {
+	private var skorMetni:FlxText;
+	private var skor:Int = 0;
+
 	override public function create():Void
 	{
+		#if desktop
+		FlxG.mouse.visible = false;
+		#end
+		
 		super.create();
 	}
 

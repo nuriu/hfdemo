@@ -18,6 +18,10 @@ class OyunDurumu extends FlxState
 
 	override public function create():Void
 	{
+		#if desktop
+		FlxG.mouse.visible = false;
+		#end
+		
 		super.create();
 
 		if (FlxG.sound.music == null)
