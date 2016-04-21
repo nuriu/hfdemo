@@ -2,7 +2,6 @@ package;
 
 import flash.system.System;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -16,7 +15,7 @@ class MenuDurumu extends FlxState
 	private var baslik : FlxText;
 	private var yapan : FlxText;
 
-	override public function create():Void
+	override public function create() : Void
 	{
 		super.create();
 		
@@ -53,8 +52,8 @@ class MenuDurumu extends FlxState
 		add(yapan);
 	}
 
-	override public function update(elapsed:Float):Void
+	override public function update(gecenZaman : Float) : Void
 	{
-		super.update(elapsed);
+		super.update(gecenZaman);
 	}
 }

@@ -16,7 +16,7 @@ import flixel.group.FlxSpriteGroup;
 class OyunDurumu extends FlxState
 {
 	private var skorMetni : FlxText;
-	private var skor : Int = 0;
+	public static var skor : Int = 0;
 
 	private var yilanBas : FlxSprite;
 	private var yilanGovde : FlxSpriteGroup;
@@ -53,7 +53,7 @@ class OyunDurumu extends FlxState
 		// yılanın başındaki kare
 		yilanBas = new FlxSprite(ortaX - KAREBOYUTU * 2, ortaY);
 		yilanBas.makeGraphic(KAREBOYUTU - 2, KAREBOYUTU - 2, FlxColor.LIME);
-		offestSprite(yilanBas);
+		offsetSprite(yilanBas);
 
 		// baş karenin son pozisyonları
 		basPozisyonlari = [FlxPoint.get(yilanBas.x, yilanBas.y)];
@@ -69,15 +69,15 @@ class OyunDurumu extends FlxState
 		// baş kareyi en son ekle en üstte olsun 
 		add(yilanBas);
 
-		// hareket zamanlayıcısını sıfırla
-		zamanlayiciyiSifirla();
-
 		// toplanabilir kareler
 		toplanabilir = new FlxSprite();
 		toplanabilir.makeGraphic(KAREBOYUTU - 2, KAREBOYUTU - 2, FlxColor.RED);
 		rastgeleToplanabilirUret();
-		offestSprite(toplanabilir);
+		offsetSprite(toplanabilir);
 		add(toplanabilir);
+
+		// hareket zamanlayıcısını sıfırla
+		zamanlayiciyiSifirla();
 	}
 
 	override public function update(gecenZaman : Float) : Void
@@ -115,7 +115,7 @@ class OyunDurumu extends FlxState
 		skorMetni.alpha = 0;
 	}
 
-	private function offestSprite(Sprite : FlxSprite) : Void
+	private function offsetSprite(Sprite : FlxSprite) : Void
 	{
 		Sprite.offset.set(1, 1);
 		Sprite.centerOffsets();
@@ -140,6 +140,8 @@ class OyunDurumu extends FlxState
 
 		// toplanabilir ile temasta ilgili fonksiyon çağrılacak
 		FlxG.overlap(yilanBas, toplanabilir, toplanabiliriTopla);
+		// kendine çarpması durumunda oyunu bitir
+		FlxG.overlap(yilanBas, yilanGovde, oyunuBitir);
 
 		// baş karenin yönünü ayarla
 		switch (sonrakiYon)
@@ -199,5 +201,10 @@ class OyunDurumu extends FlxState
 		{
 			hareketAraligi -= 0.25;
 		}
+	}
+
+	private function oyunuBitir(?Object1:FlxObject, ?Object2:FlxObject) : Void
+	{
+		FlxG.switchState(new YenilmeDurumu());
 	}
 }
