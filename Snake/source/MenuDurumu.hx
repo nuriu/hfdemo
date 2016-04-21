@@ -11,10 +11,10 @@ import flixel.util.FlxAxes;
 
 class MenuDurumu extends FlxState
 {
-	private var baslatTusu:FlxButton;
-	private var cikisTusu:FlxButton;
-	private var baslik:FlxText;
-	private var yapan:FlxText;
+	private var baslatTusu : FlxButton;
+	private var cikisTusu : FlxButton;
+	private var baslik : FlxText;
+	private var yapan : FlxText;
 
 	override public function create():Void
 	{
