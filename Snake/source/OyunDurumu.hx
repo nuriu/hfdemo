@@ -71,6 +71,13 @@ class OyunDurumu extends FlxState
 
 		// hareket zamanlayıcısını sıfırla
 		zamanlayiciyiSifirla();
+
+		// toplanabilir kareler
+		toplanabilir = new FlxSprite();
+		toplanabilir.makeGraphic(KAREBOYUTU - 2, KAREBOYUTU - 2, FlxColor.RED);
+		rastgeleToplanabilirUret();
+		offestSprite(toplanabilir);
+		add(toplanabilir);
 	}
 
 	override public function update(gecenZaman : Float) : Void
@@ -160,5 +167,15 @@ class OyunDurumu extends FlxState
 
 		new FlxTimer().start(hareketAraligi / FlxG.updateFramerate, zamanlayiciyiSifirla);
 		hareketEttir();
+	}
+
+	private function rastgeleToplanabilirUret(?Object1:FlxObject, ?Object2:FlxObject) : Void
+	{
+		// toplanabilir öğeyi rastgele konuma taşı
+		toplanabilir.x = FlxG.random.int(0, Math.floor(FlxG.width / 8) - 1) * 8;
+		toplanabilir.y = FlxG.random.int(0, Math.floor(FlxG.height / 8) - 1) * 8;
+
+		// üretilen koordinatların halihazırda yılanın bulunduğu yerde olmamasını sağla
+		FlxG.overlap(toplanabilir, yilanGovde, rastgeleToplanabilirUret);
 	}
 }
