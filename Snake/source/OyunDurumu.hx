@@ -138,6 +138,9 @@ class OyunDurumu extends FlxState
 			basPozisyonlari.pop();
 		}
 
+		// toplanabilir ile temasta ilgili fonksiyon çağrılacak
+		FlxG.overlap(yilanBas, toplanabilir, toplanabiliriTopla);
+
 		// baş karenin yönünü ayarla
 		switch (sonrakiYon)
 		{
@@ -177,5 +180,24 @@ class OyunDurumu extends FlxState
 
 		// üretilen koordinatların halihazırda yılanın bulunduğu yerde olmamasını sağla
 		FlxG.overlap(toplanabilir, yilanGovde, rastgeleToplanabilirUret);
+	}
+
+	private function toplanabiliriTopla(?Object1:FlxObject, ?Object2:FlxObject) : Void
+	{
+		// skor puanı ver ve metni güncelle
+		skor += 8;
+		metniGuncelle("Skor: " + skor);
+
+		// toplanabilir öğeyi yeni bir konuma taşı
+		rastgeleToplanabilirUret();
+
+		// yılana yeni gövde parçası ekle
+		govdeEkle();
+
+		// hızlandır
+		if (hareketAraligi >= ARALIK)
+		{
+			hareketAraligi -= 0.25;
+		}
 	}
 }
