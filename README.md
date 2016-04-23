@@ -3,9 +3,9 @@ HaxeFlixel kütüphanesini öğrenim amaçlı çıkartılan yol haritasındaki �
 
 1-) Pong  
 2-) Snake  
-3-) Topdown  
-4-) Platform  
-5-)  
-6-)  
+3-) Pişti  
+4-) Okey  
+5-) Topdown  
+6-) Platform  
 7-)  
 8-)  
