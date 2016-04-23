@@ -12,10 +12,11 @@ class MenuDurumu extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		Sys.println("DEBUG: MenuDurumu durumuna geçildi.");
 	}
 
-	override public function update(elapsed:Float):Void
+	override public function update(gecenZaman : Float) : Void
 	{
-		super.update(elapsed);
+		super.update(gecenZaman);
 	}
 }
