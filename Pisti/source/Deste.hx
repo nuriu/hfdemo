@@ -2,7 +2,10 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.math.FlxPoint;
 import flixel.group.FlxSpriteGroup;
+
+import haxe.ds.GenericStack;
 
 class Deste extends FlxSpriteGroup
 {
@@ -10,8 +13,11 @@ class Deste extends FlxSpriteGroup
 	public var KARO : Array<Kart> = new Array<Kart>();
 	public var KUPA : Array<Kart> = new Array<Kart>();
 	public var MACA : Array<Kart> = new Array<Kart>();
+	
+	public var D : GenericStack<Kart> = new GenericStack<Kart>();
 
-	public var deste : Array<Kart> = new Array<Kart>();
+	private var deste : Array<Kart> = new Array<Kart>();
+	private var cekilenKartIndisleri : Array<Int> = new Array<Int>();
 
 	public function new()
     {
@@ -21,6 +27,8 @@ class Deste extends FlxSpriteGroup
         karolariYukle();
         kupalariYukle();
         macalariYukle();
+
+        karisikDesteOlustur();
 
         Sys.println("DEBUG: Bir deste oluşturuldu.");
     }
@@ -103,6 +111,27 @@ class Deste extends FlxSpriteGroup
 			// ilgili resimleri yükle ve ana kart destesine ekle
 			this.MACA[i].loadGraphic("assets/images/maca/" + i + ".png");
 			this.deste.push(this.MACA[i]);
+		}
+	}
+
+	private function kartCekilmisMi(indis : Int) : Bool
+	{
+		for (i in 0 ... this.cekilenKartIndisleri.length) {
+			if (indis == this.cekilenKartIndisleri[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function karisikDesteOlustur() : Void
+	{
+		var g;
+		for (i in 0 ... this.deste.length) {
+			g = FlxG.random.int(1, 53);
+			if (!kartCekilmisMi(g)) {
+				this.D.add(this.deste[g]);
+			}
 		}
 	}
 }

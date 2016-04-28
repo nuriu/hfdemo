@@ -7,19 +7,21 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 
+import haxe.ds.GenericStack;
+
 class OyunDurumu extends FlxState
 {
+	public var ortaX : Float = FlxG.width / 2;
+	public var ortaY : Float = FlxG.height / 2;
+
+	private var ortaYigin : GenericStack<Kart> = new GenericStack<Kart>();
+
 	override public function create():Void
 	{
-		FlxG.debugger.visible = true;
+		//FlxG.debugger.visible = true;
 		super.create();
 
 		Sys.println("DEBUG: OyunDurumu durumuna geçildi.");
-
-		// örnek kart
-		var d = new Deste();
-		d.deste[13].x = 10;
-		add(d.deste[13]);
 	}
 
 	override public function update(gecenZaman : Float) : Void
