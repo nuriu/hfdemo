@@ -36,6 +36,7 @@ class OyunDurumu extends FlxState
 		kartDagit();
 		oyuncuElleriniYazdir();
 		YZoyuncuKartlariniCiz();
+		oyuncununEliniCiz();
 	}
 
 	override public function update(gecenZaman : Float) : Void
@@ -97,6 +98,14 @@ class OyunDurumu extends FlxState
 			k[i - 1].setPosition(FlxG.width - k[i - 1].height + 25, 100 + (k[i - 1].width / 2) * (i - 8));
 			k[i - 1].angle = 90;
 			add(k[i - 1]);
+		}
+	}
+
+	private function oyuncununEliniCiz() : Void 
+	{
+		for (i in 0 ... oyuncular[3].El.length) {
+			oyuncular[3].El[i].setPosition(480 + (oyuncular[3].El[i].width / 2) * i, FlxG.height - oyuncular[3].El[i].height);
+			add(oyuncular[3].El[i]);
 		}
 	}
 }
