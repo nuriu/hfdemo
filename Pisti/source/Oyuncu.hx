@@ -4,7 +4,8 @@ import flixel.FlxG;
 
 class Oyuncu {
 	public var El : Array<Kart> = new Array<Kart>();
-
+	public var ToplananKartlar : Array<Kart> = new Array<Kart>();
+	
 	public function new()
     {
         Sys.println("DEBUG: Bir oyuncu oluşturuldu.");

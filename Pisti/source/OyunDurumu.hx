@@ -35,6 +35,7 @@ class OyunDurumu extends FlxState
 		ortayaKartDagit();
 		kartDagit();
 		oyuncuElleriniYazdir();
+		YZoyuncuKartlariniCiz();
 	}
 
 	override public function update(gecenZaman : Float) : Void
@@ -67,6 +68,35 @@ class OyunDurumu extends FlxState
 		for (i in 0 ... 4) {
 			oyuncular[i].EliYazdir();
 			Sys.println("|---------------|");
+		}
+	}
+
+	private function YZoyuncuKartlariniCiz() : Void
+	{ // TODO: not: dizi çalışmadı, iyileştirme yap
+
+		var k = new Array<FlxSprite>();
+
+		for (i in 1 ... 5) {
+			k[i - 1] = new FlxSprite();
+			k[i - 1].loadGraphic("assets/images/arkaMavi.png");
+			k[i - 1].setPosition(25, 100 + ((k[i - 1].width / 2) * i));
+			k[i - 1].angle = 90;
+			add(k[i - 1]);
+		}
+
+		for (i in 5 ... 9) {
+			k[i - 1] = new FlxSprite();
+			k[i - 1].loadGraphic("assets/images/arkaKirmizi.png");
+			k[i - 1].setPosition(175 + ((k[i - 1].height / 2) * (i / 1.5)), 15);
+			add(k[i - 1]);
+		}
+
+		for (i in 9 ... 13) {
+			k[i - 1] = new FlxSprite();
+			k[i - 1].loadGraphic("assets/images/arkaYesil.png");
+			k[i - 1].setPosition(FlxG.width - k[i - 1].height + 25, 100 + (k[i - 1].width / 2) * (i - 8));
+			k[i - 1].angle = 90;
+			add(k[i - 1]);
 		}
 	}
 }
