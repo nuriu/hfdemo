@@ -17,8 +17,6 @@ class Kart extends FlxSprite
         this.tur = kartTuru;
         this.deger = kartDegeri;
         this.puanDegeri = kartPuanDegeri;
-
-        Sys.println("DEBUG: " + this.tur + " türünde " + this.deger + " değerinde " + this.puanDegeri + " puan değerine sahip bir kart oluşturuldu.");
     }
 
     override public function update(elapsed:Float):Void
