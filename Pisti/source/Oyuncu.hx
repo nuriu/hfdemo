@@ -18,7 +18,7 @@ class Oyuncu {
 	public function EliYazdir() : Void 
 	{
 		for (i in 0 ... this.El.length) {
-			Sys.println("| " + El[i].tur + ": " + El[i].deger);
+			Sys.println("| " + El[i].tur + ": \t" + El[i].deger + "\t|");
 		}
 	}
 }

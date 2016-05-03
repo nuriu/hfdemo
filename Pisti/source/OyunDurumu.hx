@@ -15,7 +15,7 @@ class OyunDurumu extends FlxState
 	public var ortaY : Float = FlxG.height / 2;
 
 	private var deste : Deste;
-	private var ortaYigin : GenericStack<Kart> = new GenericStack<Kart>();
+	private var ortaYigin : Array<Kart> = new Array<Kart>();
 	private var oyuncular : Array<Oyuncu> = new Array<Oyuncu>();
 
 	override public function create():Void
@@ -37,6 +37,7 @@ class OyunDurumu extends FlxState
 		oyuncuElleriniYazdir();
 		YZoyuncuKartlariniCiz();
 		oyuncununEliniCiz();
+		ortadakiSonKartiCiz();
 	}
 
 	override public function update(gecenZaman : Float) : Void
@@ -47,7 +48,7 @@ class OyunDurumu extends FlxState
 	private function ortayaKartDagit() : Void
 	{
 		for (i in 0 ... 4) {
-			ortaYigin.add(deste.karisikDeste.pop());
+			ortaYigin.push(deste.karisikDeste.pop());
 		}
 	}
 
@@ -63,9 +64,9 @@ class OyunDurumu extends FlxState
 
 	private function oyuncuElleriniYazdir() : Void
 	{
-		Sys.println("|----------------");
+		Sys.println("|---------------|");
 		Sys.println("| Oyuncu Elleri:|");
-		Sys.println("|----------------");
+		Sys.println("|---------------|");
 		for (i in 0 ... 4) {
 			oyuncular[i].EliYazdir();
 			Sys.println("|---------------|");
@@ -73,7 +74,7 @@ class OyunDurumu extends FlxState
 	}
 
 	private function YZoyuncuKartlariniCiz() : Void
-	{ // TODO: not: dizi çalışmadı, iyileştirme yap
+	{ // TODO: iyileştirme yap (iç içe döngü denenebilir)
 
 		var k = new Array<FlxSprite>();
 
@@ -107,5 +108,11 @@ class OyunDurumu extends FlxState
 			oyuncular[3].El[i].setPosition(480 + (oyuncular[3].El[i].width / 2) * i, FlxG.height - oyuncular[3].El[i].height);
 			add(oyuncular[3].El[i]);
 		}
+	}
+
+	private function ortadakiSonKartiCiz() : Void
+	{
+		ortaYigin[ortaYigin.length - 1].setPosition(ortaX - (ortaYigin[ortaYigin.length - 1].width / 2), ortaY - (ortaYigin[ortaYigin.length - 1].height / 2));
+		add(ortaYigin[ortaYigin.length - 1]);
 	}
 }
