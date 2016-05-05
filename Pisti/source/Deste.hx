@@ -34,6 +34,7 @@ class Deste extends FlxSpriteGroup
 		super.update(gecenZaman);
 	}
 
+	// TODO: yükleme fonksiyonlarını birleştir
 	private function sinekleriYukle() : Void
 	{
         for (i in 0...13)

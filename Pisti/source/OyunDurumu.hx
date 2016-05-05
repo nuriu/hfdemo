@@ -13,12 +13,12 @@ class OyunDurumu extends FlxState
 {
 	public static inline var EN : Int = 140;
 	public static inline var BOY : Int = 190;
+	public static var ortaYigin : Array<Kart> = new Array<Kart>();
 
 	public var ortaX : Float = FlxG.width / 2;
 	public var ortaY : Float = FlxG.height / 2;
 
 	private var deste : Deste;
-	private var ortaYigin : Array<Kart> = new Array<Kart>();
 	private var oyuncular : Array<Oyuncu> = new Array<Oyuncu>();
 
 	override public function create():Void
@@ -60,19 +60,9 @@ class OyunDurumu extends FlxState
 					if ((FlxG.mouse.x > oyuncular[3].El[i].x && FlxG.mouse.x < oyuncular[3].El[i].x + EN) && 
 						(FlxG.mouse.y > oyuncular[3].El[i].y && FlxG.mouse.y < oyuncular[3].El[i].y + BOY)) 
 					{
-						Sys.println("DEBUG: " + oyuncular[3].El[i].tur + " " + oyuncular[3].El[i].deger + " kartı oynandı.");
-
-						ortaYigin[ortaYigin.length - 1].destroy();
-						oyuncular[3].El[i].setPosition(ortaYigin[ortaYigin.length - 1].x,
-													   ortaYigin[ortaYigin.length - 1].y);
-
-						ortaYigin.push(oyuncular[3].El[i]);
-						oyuncular[3].El.remove(oyuncular[3].El[i]);
-
-						// DEBUG
-						oyuncular[3].EliYazdir();
-						ortakiKartlariYazdir(); 
-					} else 
+						oyuncular[3].KartiOyna(i);
+					}
+					else 
 						continue;
 				}
 			}
@@ -148,12 +138,15 @@ class OyunDurumu extends FlxState
 
 	private function ortadakiSonKartiCiz() : Void
 	{
-		ortaYigin[ortaYigin.length - 1].setPosition(ortaX - (ortaYigin[ortaYigin.length - 1].width / 2),
-													ortaY - (ortaYigin[ortaYigin.length - 1].height / 2));
-		add(ortaYigin[ortaYigin.length - 1]);
+		if (ortaYigin != null)
+		{
+			ortaYigin[ortaYigin.length - 1].setPosition(ortaX - (ortaYigin[ortaYigin.length - 1].width / 2),
+														ortaY - (ortaYigin[ortaYigin.length - 1].height / 2));
+			add(ortaYigin[ortaYigin.length - 1]);
+		}
 	}
 
-	private function ortakiKartlariYazdir() : Void 
+	public static function ortakiKartlariYazdir() : Void 
 	{
 		Sys.println("");
 		Sys.println("|-------------------|");
