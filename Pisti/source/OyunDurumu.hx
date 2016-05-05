@@ -6,38 +6,37 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
-import flixel.util.FlxColor;
 import haxe.ds.GenericStack;
 
 class OyunDurumu extends FlxState
 {
-	public static inline var EN : Int = 140;
-	public static inline var BOY : Int = 190;
-	public static var ortaYigin : Array<Kart> = new Array<Kart>();
+	public static inline var EN 	: 	Int = 140;
+	public static inline var BOY 	: 	Int = 190;
+	public static var ortaYigin 	: 	Array<Kart> = new Array<Kart>();
+	public static var sonKazanan;
+	public static var kazananOyuncu :	Oyuncu;
 
-	public var ortaX : Float = FlxG.width / 2;
-	public var ortaY : Float = FlxG.height / 2;
+	public var ortaX 				: 	Float = FlxG.width / 2;
+	public var ortaY 				: 	Float = FlxG.height / 2;
 
-	private var deste : Deste;
-	private var oyuncular : Array<Oyuncu> = new Array<Oyuncu>();
-	private var oyunEli : Int = 0;
+	private var deste 				: 	Deste;
+	private var oyuncular 			: 	Array<Oyuncu> = new Array<Oyuncu>();
+	private var oyunEli 			: 	Int = 0;
 
 	override public function create():Void
 	{
 		//FlxG.debugger.visible = true;
 		super.create();
 
-		FlxG.camera.bgColor = FlxColor.GREEN;
-
 		Sys.println("\nDEBUG: OyunDurumu durumuna geçildi.");
 
 		deste = new Deste();
 
 		// oyuncuları oluşturma
-		var yz1 	: Oyuncu = new Oyuncu(); oyuncular.push(yz1);
-		var yz2 	: Oyuncu = new Oyuncu(); oyuncular.push(yz2);
-		var yz3 	: Oyuncu = new Oyuncu(); oyuncular.push(yz3);
-		var oyuncu 	: Oyuncu = new Oyuncu(); oyuncular.push(oyuncu);
+		var yz1 	: Oyuncu = new Oyuncu(1); oyuncular.push(yz1);
+		var yz2 	: Oyuncu = new Oyuncu(2); oyuncular.push(yz2);
+		var yz3 	: Oyuncu = new Oyuncu(3); oyuncular.push(yz3);
+		var oyuncu 	: Oyuncu = new Oyuncu(4); oyuncular.push(oyuncu);
 
 		// kart dağıtma işlemleri
 		ortayaKartDagit();
@@ -45,7 +44,7 @@ class OyunDurumu extends FlxState
 
 		// debug bilgileri yazdırma işlemleri
 		oyuncuElleriniYazdir();
-		ortakiKartlariYazdir();
+		ortadakiKartlariYazdir();
 
 		// çizdirme işlemleri
 		ortadakiSonKartiCiz();
@@ -85,11 +84,17 @@ class OyunDurumu extends FlxState
 		// oyuncunun kartlarının bitmesi durumu
 		if (oyuncular[3].El.length < 1 || oyuncular[3].El == null)
 		{
+			oyunEli++;
+
 			Sys.println("\nDEBUG: Yeni El İçin Kartlar Dağıtıldı!");
+			Sys.println("\nDEBUG: EL: " + oyunEli);
+			Sys.println("\nDEBUG: Son Kazanan Oyuncu: " + OyunDurumu.sonKazanan);
+
 			kartDagit();
 			oyuncununEliniCiz();
+
 			oyuncuElleriniYazdir();
-			oyunEli++;	
+			OyunDurumu.ortadakiKartlariYazdir();
 		}
 	}
 
@@ -104,6 +109,12 @@ class OyunDurumu extends FlxState
 	{
 		if (deste.karisikDeste.isEmpty())
 		{
+			// ortada kart kaldı ise kartları son kazanan alır
+			if (ortaYigin.length > 0)
+				oyuncular[sonKazanan - 1].KartlariTopla();
+
+			oyuncuToplananKartlariYazdir();
+			oyuncuPuanlariniHesapla();
 			FlxG.switchState(new BitmeDurumu());
 		}
 		else
@@ -123,11 +134,19 @@ class OyunDurumu extends FlxState
 		Sys.println("|---------------|");
 		Sys.println("| Oyuncu Elleri:|");
 		Sys.println("|---------------|");
-		for (i in 0 ... 4) {
+
+		for (i in 0 ... 4)
 			oyuncular[i].EliYazdir();
-			Sys.println("|---------------|");
-		}
+
 		Sys.println("");
+	}
+
+	public function oyuncuToplananKartlariYazdir() : Void
+	{
+		for (i in 0 ... 4)
+		{
+			oyuncular[i].ToplananKartlariYazdir();	
+		}
 	}
 
 	private function YZoyuncuKartlariniCiz() : Void
@@ -181,13 +200,14 @@ class OyunDurumu extends FlxState
 		}
 	}
 
-	public static function ortakiKartlariYazdir() : Void 
+	public static function ortadakiKartlariYazdir() : Void 
 	{
 		if (ortaYigin.length > 0)
 		{
 			Sys.println("");
 			Sys.println("|-------------------|");
 			Sys.println("| Ortadaki Kartlar: |");
+			Sys.println("| Kart Sayısı: " + ortaYigin.length + "\t|");
 			Sys.println("|-------------------|");
 
 			for (i in 0 ... ortaYigin.length)
@@ -198,7 +218,38 @@ class OyunDurumu extends FlxState
 		}
 		else
 		{
+			Sys.println("");
+			Sys.println("|-------------------|");
 			Sys.println("|--Ortada Kart Yok--|");
+			Sys.println("|-------------------|");
+			Sys.println("");
+		}
+	}
+
+	public function oyuncuPuanlariniHesapla() : Void
+	{
+		var enCokKart : Int = 0;
+		var enCokKartaSahipOyuncu : Int = 0;
+
+		for (i in 0 ... oyuncular.length)
+		{
+			oyuncular[i].PuanHesapla();
+
+			if (oyuncular[i].ToplananKartlar.length >= enCokKart)
+				enCokKartaSahipOyuncu = i;
+		}
+
+		oyuncular[enCokKartaSahipOyuncu].Puan += 3;
+
+		var enYuksekPuan : Int = 0;
+
+		for (i in 0 ... oyuncular.length)
+		{
+			if (oyuncular[i].Puan >= enYuksekPuan)
+			{
+				enYuksekPuan = oyuncular[i].Puan;
+				kazananOyuncu = oyuncular[i];
+			}
 		}
 	}
 }

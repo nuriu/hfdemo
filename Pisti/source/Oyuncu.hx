@@ -4,12 +4,15 @@ import flixel.FlxG;
 
 class Oyuncu 
 {
+	public var KIMLIK : Int;
+
 	public var El : Array<Kart> = new Array<Kart>();
 	public var ToplananKartlar : Array<Kart> = new Array<Kart>();
 	public var Puan : Int = 0;
 
-	public function new()
+	public function new(kimlik : Int)
     {
+    	this.KIMLIK = kimlik;
         Sys.println("DEBUG: Bir oyuncu oluşturuldu.");
     }
 
@@ -19,14 +22,38 @@ class Oyuncu
 
 	public function EliYazdir() : Void 
 	{
-		for (i in 0 ... El.length) {
+		Sys.println("| Oyuncu: " + KIMLIK + " \t|");
+		Sys.println("| Kart Sayısı: " + El.length + "|");
+		Sys.println("|---------------|");
+		for (i in 0 ... El.length)
 			Sys.println("| " + El[i].tur + ": \t" + El[i].deger + "\t|");
-		}
+		Sys.println("|---------------|");
+	}
+
+	public function ToplananKartlariYazdir() : Void
+	{
+		Sys.println("");
+		Sys.println("|-------------------|");
+		Sys.println("| Toplanan Kartlar: |");
+		Sys.println("|-------------------|");
+		Sys.println("| Oyuncu: " + KIMLIK + "\t\t\t|");
+		Sys.println("| Kart Sayısı: " + ToplananKartlar.length + "\t|");
+		Sys.println("|-------------------|");
+		
+		for (i in 0 ... ToplananKartlar.length)
+			Sys.println("| " + ToplananKartlar[i].tur + ": \t" + ToplananKartlar[i].deger + "\t\t|");
+
+		Sys.println("|-------------------|");
+		Sys.println("");
 	}
 
 	public function KartiOyna(i : Int) : Void
 	{
-		Sys.println("DEBUG: " + El[i].tur + " " + El[i].deger + " kartı oynandı.");
+		Sys.println("DEBUG: " + KIMLIK + ". Oyuncu " + El[i].tur + " " + El[i].deger + " kartını oynandı.");
+		Sys.println("");
+		Sys.println("|---------------|");
+		Sys.println("| Kalan Kartlar:|");
+		Sys.println("|---------------|");
 		var ortadakiKart : Kart = OyunDurumu.ortaYigin[OyunDurumu.ortaYigin.length - 1];
 
 		// oynanan kartı ortaya taşı
@@ -64,15 +91,17 @@ class Oyuncu
 
 		// DEBUG
 		EliYazdir();
-		OyunDurumu.ortakiKartlariYazdir(); 
+		OyunDurumu.ortadakiKartlariYazdir(); 
 	}
 
-	private function KartlariTopla() : Void
+	public function KartlariTopla() : Void
 	{
 		for (i in 0 ... OyunDurumu.ortaYigin.length)
 		{
 			ToplananKartlar.push(OyunDurumu.ortaYigin.pop());	
 		}
+
+		OyunDurumu.sonKazanan = this.KIMLIK;
 	}
 
 	public function YZKartOyna() : Void
@@ -111,5 +140,16 @@ class Oyuncu
 			KartiOyna(g);
 		}
 		
+	}
+
+	public function PuanHesapla() : Void
+	{
+		if (ToplananKartlar.length > 0)
+		{
+			for (i in 0 ... ToplananKartlar.length)
+				Puan += ToplananKartlar[i].puanDegeri;
+		}
+		else
+			Puan = 0;
 	}
 }
