@@ -125,13 +125,13 @@ class Deste extends FlxSpriteGroup
 	{
 		var g;
 		
-		for (i in 0 ... deste.length) {			// deste bitene kadar
+		for (i in 0 ... deste.length)			// deste bitene kadar
+		{
 			g = FlxG.random.int(0, 51); 		// rastgele bir indis üret
 
 			while (kartCekilmisMi(g) == true)	// indisteki kart daha önce çekilmiş ise
-			{
 				g = FlxG.random.int(0, 51); 	// rastgele bir indis üretmeye devam et
-			}
+
 			cekilenKartIndisleri.push(g); 		// indisi çekilenlere ekle
 			karisikDeste.add(this.deste[g]); 	// çekilen kartı karışık desteye ekle
 		}

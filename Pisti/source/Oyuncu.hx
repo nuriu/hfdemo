@@ -74,4 +74,42 @@ class Oyuncu
 			ToplananKartlar.push(OyunDurumu.ortaYigin.pop());	
 		}
 	}
+
+	public function YZKartOyna() : Void
+	{
+		if (OyunDurumu.ortaYigin.length > 0) 			// ortada kart var ise
+		{
+			var ortadakiKart : Kart = OyunDurumu.ortaYigin[OyunDurumu.ortaYigin.length - 1];
+
+			// oyuncunun elini tara
+			for (i in 0 ... El.length)
+			{
+				if (ortadakiKart.deger == El[i].deger)	// aynı karttan var ise oyna
+				{
+					KartiOyna(i);
+					break;
+				}
+				else									// aynı karttan yoksa rastgele kart oyna
+				{
+					var g = FlxG.random.int(0, 3);		// rastgele indis üret
+
+					while (El[g] == null)				// o indisteki kart oynandıysa tekrar indis üret
+						g = FlxG.random.int(0, 3);
+
+					KartiOyna(g);
+					break;
+				}
+			}
+		}
+		else											// ortada kart yok ise
+		{
+			var g = FlxG.random.int(0, 3);				// rastgele indis üret
+
+			while (El[g] == null)						// o indisteki kart oynandıysa tekrar indis üret
+				g = FlxG.random.int(0, 3);
+
+			KartiOyna(g);
+		}
+		
+	}
 }

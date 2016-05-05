@@ -20,6 +20,7 @@ class OyunDurumu extends FlxState
 
 	private var deste : Deste;
 	private var oyuncular : Array<Oyuncu> = new Array<Oyuncu>();
+	private var oyunEli : Int = 0;
 
 	override public function create():Void
 	{
@@ -32,27 +33,35 @@ class OyunDurumu extends FlxState
 
 		deste = new Deste();
 
-		var yz1 : YZOyuncu = new YZOyuncu(); oyuncular.push(yz1);
-		var yz2 : YZOyuncu = new YZOyuncu(); oyuncular.push(yz2);
-		var yz3 : YZOyuncu = new YZOyuncu(); oyuncular.push(yz3);
-		var oyuncu : Oyuncu = new Oyuncu(); oyuncular.push(oyuncu);
+		// oyuncuları oluşturma
+		var yz1 	: Oyuncu = new Oyuncu(); oyuncular.push(yz1);
+		var yz2 	: Oyuncu = new Oyuncu(); oyuncular.push(yz2);
+		var yz3 	: Oyuncu = new Oyuncu(); oyuncular.push(yz3);
+		var oyuncu 	: Oyuncu = new Oyuncu(); oyuncular.push(oyuncu);
 
+		// kart dağıtma işlemleri
 		ortayaKartDagit();
 		kartDagit();
 
+		// debug bilgileri yazdırma işlemleri
 		oyuncuElleriniYazdir();
 		ortakiKartlariYazdir();
 
+		// çizdirme işlemleri
 		ortadakiSonKartiCiz();
 		YZoyuncuKartlariniCiz();
 		oyuncununEliniCiz();
+
+		oyunEli = 1;
 	}
 
 	override public function update(gecenZaman : Float) : Void
 	{
 		super.update(gecenZaman);
 
-		if (FlxG.mouse.justReleased) {
+		// oyuncunun kart oynama durumu
+		if (FlxG.mouse.justReleased)
+		{
 			for (i in 0 ... oyuncular[3].El.length) 
 			{
 				if (oyuncular[3].El[i] != null) 
@@ -61,11 +70,26 @@ class OyunDurumu extends FlxState
 						(FlxG.mouse.y > oyuncular[3].El[i].y && FlxG.mouse.y < oyuncular[3].El[i].y + BOY)) 
 					{
 						oyuncular[3].KartiOyna(i);
+
+						for (i in 0 ... 3)
+							oyuncular[i].YZKartOyna();
+
+						ortadakiSonKartiCiz();
 					}
 					else 
 						continue;
 				}
 			}
+		}
+
+		// oyuncunun kartlarının bitmesi durumu
+		if (oyuncular[3].El.length < 1 || oyuncular[3].El == null)
+		{
+			Sys.println("\nDEBUG: Yeni El İçin Kartlar Dağıtıldı!");
+			kartDagit();
+			oyuncununEliniCiz();
+			oyuncuElleriniYazdir();
+			oyunEli++;	
 		}
 	}
 
@@ -78,12 +102,19 @@ class OyunDurumu extends FlxState
 
 	private function kartDagit() : Void 
 	{
-		for (i in 0 ... oyuncular.length) {
-			for (j in 0 ... 4) {
-				// TODO: deste bittiyse oyunu bitir.
-				oyuncular[i].El.push(deste.karisikDeste.pop());
+		if (deste.karisikDeste.isEmpty())
+		{
+			FlxG.switchState(new BitmeDurumu());
+		}
+		else
+		{
+			for (i in 0 ... oyuncular.length)
+			{
+				for (j in 0 ... 4)
+					oyuncular[i].El.push(deste.karisikDeste.pop());
 			}
 		}
+		
 	}
 
 	private function oyuncuElleriniYazdir() : Void
@@ -100,7 +131,7 @@ class OyunDurumu extends FlxState
 	}
 
 	private function YZoyuncuKartlariniCiz() : Void
-	{ // TODO: iyileştirme yap (iç içe döngü denenebilir)
+	{ // TODO: iyileştirme yap ve kartları yz oyunculara ata
 
 		var k = new Array<FlxSprite>();
 
@@ -130,15 +161,19 @@ class OyunDurumu extends FlxState
 
 	private function oyuncununEliniCiz() : Void 
 	{
-		for (i in 0 ... oyuncular[3].El.length) {
-			oyuncular[3].El[i].setPosition((ortaX - (EN*2)) + EN * i, FlxG.height - BOY - 20);
-			add(oyuncular[3].El[i]);
+		if (oyuncular[3].El.length > 0)
+		{
+			for (i in 0 ... oyuncular[3].El.length) 
+			{
+				oyuncular[3].El[i].setPosition((ortaX - (EN*2)) + EN * i, FlxG.height - BOY - 20);
+				add(oyuncular[3].El[i]);
+			}
 		}
 	}
 
 	private function ortadakiSonKartiCiz() : Void
 	{
-		if (ortaYigin != null)
+		if (ortaYigin.length > 0)
 		{
 			ortaYigin[ortaYigin.length - 1].setPosition(ortaX - (ortaYigin[ortaYigin.length - 1].width / 2),
 														ortaY - (ortaYigin[ortaYigin.length - 1].height / 2));
@@ -148,14 +183,22 @@ class OyunDurumu extends FlxState
 
 	public static function ortakiKartlariYazdir() : Void 
 	{
-		Sys.println("");
-		Sys.println("|-------------------|");
-		Sys.println("| Ortadaki Kartlar: |");
-		Sys.println("|-------------------|");
-		for (i in 0 ... ortaYigin.length) {
-			Sys.println("| " + ortaYigin[i].tur + ": \t" + ortaYigin[i].deger + "\t\t|");
+		if (ortaYigin.length > 0)
+		{
+			Sys.println("");
+			Sys.println("|-------------------|");
+			Sys.println("| Ortadaki Kartlar: |");
+			Sys.println("|-------------------|");
+
+			for (i in 0 ... ortaYigin.length)
+				Sys.println("| " + ortaYigin[i].tur + ": \t" + ortaYigin[i].deger + "\t\t|");
+
+			Sys.println("|-------------------|");
+			Sys.println("");	
 		}
-		Sys.println("|-------------------|");
-		Sys.println("");
+		else
+		{
+			Sys.println("|--Ortada Kart Yok--|");
+		}
 	}
 }
